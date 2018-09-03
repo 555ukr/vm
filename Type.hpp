@@ -18,50 +18,53 @@ public:
 
 	virtual eOperandType getType( void ) const{ return (_type); };
 
-	// virtual IOperand const * operator+( IOperand const & rhs ) const{
-	// 	eOperandType	precision;
-	// 	int	val;
-	//
-	// 	if (rhs.getType() > this->_type)
-	// 		precision = rhs.getType();
-	// 	else
-	// 		precision = this->_type;
-	// 	Type *tmp = new Type(precision, this->makeNum(this->getValue(), rhs.getValue(), precision, 1));
-	//   return (tmp);
-	// };
+	virtual IOperand const * operator+( IOperand const & rhs ) const{
+		eOperandType	precision;
+		std::string 	str;
 
-	// virtual IOperand const * operator-( IOperand const & rhs ) const{
-	// 	eOperandType	precision;
-	//
-	// 	if (rhs.getType() > this->_type)
-	// 		precision = rhs.getType();
-	// 	else
-	// 		precision = this->_type;
-	// 	Type *tmp = new Type(precision, this->makeNum(this->getValue(), rhs.getValue(), precision, 2));
-	//   return (tmp);
-	// };
-	//
-	// virtual IOperand const * operator*( IOperand const & rhs ) const{
-	// 	eOperandType	precision;
-	//
-	// 	if (rhs.getType() > this->_type)
-	// 		precision = rhs.getType();
-	// 	else
-	// 		precision = this->_type;
-	// 	Type *tmp = new Type(precision, this->makeNum(this->getValue(), rhs.getValue(), precision, 3));
-	// 	return (tmp);
-	// };
-	//
-	// virtual IOperand const * operator/( IOperand const & rhs ) const{
-	// 	eOperandType	precision;
-	//
-	// 	if (rhs.getType() > this->_type)
-	// 		precision = rhs.getType();
-	// 	else
-	// 		precision = this->_type;
-	// 	Type *tmp = new Type(precision, this->makeNum(this->getValue(), rhs.getValue(), precision, 4));
-	// 	return (tmp);
-	// };
+		if (rhs.getType() > this->_type)
+			precision = rhs.getType();
+		else
+			precision = this->_type;
+		str = makeNum(this->getValue(), rhs.getValue(), precision, 1);
+		return (makeType(precision, str));
+	};
+
+	virtual IOperand const * operator-( IOperand const & rhs ) const{
+		eOperandType	precision;
+		std::string 	str;
+
+		if (rhs.getType() > this->_type)
+			precision = rhs.getType();
+		else
+			precision = this->_type;
+		str = makeNum(this->getValue(), rhs.getValue(), precision, 2);
+		return (makeType(precision, str));
+	};
+
+	virtual IOperand const * operator*( IOperand const & rhs ) const{
+		eOperandType	precision;
+		std::string 	str;
+
+		if (rhs.getType() > this->_type)
+			precision = rhs.getType();
+		else
+			precision = this->_type;
+		str = makeNum(this->getValue(), rhs.getValue(), precision, 3);
+		return (makeType(precision, str));
+	};
+
+	virtual IOperand const * operator/( IOperand const & rhs ) const{
+		eOperandType	precision;
+		std::string 	str;
+
+		if (rhs.getType() > this->_type)
+			precision = rhs.getType();
+		else
+			precision = this->_type;
+		str = makeNum(this->getValue(), rhs.getValue(), precision, 4);
+		return (makeType(precision, str));
+	};
 
 	virtual IOperand const * operator%( IOperand const & rhs ) const{
 		eOperandType	precision;
@@ -71,10 +74,22 @@ public:
 			precision = rhs.getType();
 		else
 			precision = this->_type;
-		str = this->makeNum(this->getValue(), rhs.getValue(), 1, 5);
-		//if (precision == 1)
-			Type *tmp = new Type(precision, static_cast<int8_t>(std::stoi(str)));
-		return (tmp);
+		str = makeNum(this->getValue(), rhs.getValue(), precision, 5);
+		return (makeType(precision, str));
+
+	}
+
+	virtual Type const * makeType(eOperandType tmp, std::string str) const{
+		if (tmp == 1)
+			return (new Type(tmp, static_cast<int8_t>(std::stoi(str))));
+		else if (tmp == 2)
+			return (new Type(tmp, static_cast<int16_t>(std::stoi(str))));
+		else if (tmp == 3)
+			return (new Type(tmp, static_cast<int32_t>(std::stoi(str))));
+		else if (tmp == 4)
+			return (new Type(tmp, static_cast<float>(std::stoi(str))));
+		else
+			return (new Type(tmp, static_cast<double>(std::stoi(str))));
 	}
 	/*
 	1 +
@@ -83,7 +98,7 @@ public:
 	4 /
 	5 %
 	 */
-	virtual std::string makeNum(std::string str, std::string str1, int val, int sign){
+	virtual std::string makeNum(std::string str, std::string str1, int val, int sign) const{
 		long long 	i1, i2;
 		double 			d1, d2;
 
@@ -118,8 +133,23 @@ public:
 	}
 
 	IOperand const & operator=(IOperand const & rhs) const{
-		this->_value = rhs.getValue();
+		this->_type = rhs.getType();
+		this->_strValue = rhs.getValue();
+		this->setValue(this->_type, this->_strValue);
 		return *this;
+	}
+
+	virtual void setValue(eOperandType type, std::string str){
+		if (type == 1)
+			this->_value = static_cast <int8_t> (std::stoi(str));
+		else if (type == 2)
+			this->_value = static_cast <int16_t> (std::stoi(str));
+		else if (type == 3)
+			this->_value = static_cast <int32_t> (std::stoi(str));
+		else if (type == 4)
+			this->_value = static_cast <float> (std::stof(str));
+		else
+			this->_value = static_cast <double> (std::stod(str));
 	}
 
 	bool operator==( IOperand const & rhs ) const{
@@ -129,14 +159,6 @@ public:
 	}
 
 	virtual const std::string			getValue(void) const{
-		// eOperandType f = float_e;
-		// eOperandType d = double_e;
-		//
-		// if (this->_type == f)
-		// 	return static_cast <float> (_value);
-		// if (this->_type == d)
-		// 	return static_cast <float> (_value);
-	  // return static_cast <int> (_value);
 	  return _strValue;
 	};
 
@@ -144,9 +166,9 @@ public:
 		return this->_strValue;
 	}
 
-	// T rtValue(){
-	// 	return _value;
-	// }
+	T rtValue(){
+		return _value;
+	}
 
 private:
 	eOperandType 			_type;
