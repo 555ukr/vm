@@ -31,6 +31,10 @@ void Execute::exec(std:: list<struct pars>::iterator line){
     this->mul();
   }else if(line->command == "div"){
     this->div();
+  }else if(line->command == "mod"){
+    this->mod();
+  }else if(line->command == "print"){
+    this->print();
   }
 }
 
@@ -50,6 +54,27 @@ void Execute::mul(){
   delete second;
 }
 
+void Execute::mod(){
+  IOperand const * first;
+  IOperand const * second;
+
+  if (_lst.size() < 2){
+    throw(My_Exception("Stack is less then 2 mod()"));
+  }
+  first = this->_lst.front();
+  this->_lst.pop_front();
+  second = this->_lst.front();
+  this->_lst.pop_front();
+  if (second->getValue() == "0" || second->getValue() == "0.00"){
+    delete first;
+    delete second;
+    throw(My_Exception("Stack error div on 0 mod()"));
+  }
+  this->_lst.push_front(*first % *second);
+  delete first;
+  delete second;
+}
+
 void Execute::div(){
   IOperand const * first;
   IOperand const * second;
@@ -61,11 +86,11 @@ void Execute::div(){
   this->_lst.pop_front();
   second = this->_lst.front();
   this->_lst.pop_front();
-  // if (second->rtValue() == 0){
-  //   delete first;
-  //   delete second;
-  //   throw(My_Exception("Stack error div on 0 div()"));
-  // }
+  if (second->getValue() == "0" || second->getValue() == "0.00"){
+    delete first;
+    delete second;
+    throw(My_Exception("Stack error div on 0 div()"));
+  }
   this->_lst.push_front(*first / *second);
   delete first;
   delete second;
@@ -120,6 +145,22 @@ void Execute::assert(std:: list<struct pars>::iterator line){
   if (!(*tmp == **(_lst.begin())))
     throw(My_Exception("Not equel error assert()"));
   delete tmp;
+}
+
+void Execute::print(){
+  IOperand const * tmp;
+  Type <int8_t> * ascii;
+
+  if (_lst.size() < 1){
+    throw(My_Exception("Stack empty print()"));
+  }
+  tmp = *(_lst.begin());
+  if (tmp->getType() != 1)
+    throw(My_Exception("Not 8-bit integer print()"));
+  else{
+    ascii = (tmp);
+    std::cout << ascii->rtValue << std::endl;
+  }
 }
 
 void Execute::pop(){

@@ -4,7 +4,7 @@
 #include <list>
 #include <map>
 #include <string>
-#include <iomanip> 
+#include <iomanip>
 #include "Type.hpp"
 #include "IOperand.hpp"
 #include "eOperandType.hpp"
@@ -24,6 +24,8 @@ public:
   void sub();
   void mul();
   void div();
+  void mod();
+  void print();
 
 private:
   std::list<const IOperand *> _lst;

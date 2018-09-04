@@ -29,8 +29,6 @@ int main(int argc, char *argv[]){
       stack.loop();
     } catch (My_Exception& e){
       std::cout << e.getMessage() << std::endl;
-      std::cout << "lol" << std::endl;
     }
-    std::cout << "lol2" << std::endl;
   return (0);
 }

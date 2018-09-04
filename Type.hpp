@@ -6,6 +6,7 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <math.h>
 
 template <typename T>
 class Type: public IOperand{
@@ -144,7 +145,7 @@ public:
 			else if (sign == 4)
 				return std::to_string((d1) / (d2));
 			else
-				return std::to_string((d1) / (d2));
+				return std::to_string(fmod(d1, d2));
 		}
 		return "lol";
 	}
@@ -183,7 +184,7 @@ public:
 		return this->_strValue;
 	}
 
-	T rtValue(){
+ 	T rtValue(){
 		return _value;
 	}
 
