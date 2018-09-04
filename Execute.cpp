@@ -39,7 +39,6 @@ void Execute::mul(){
   IOperand const * second;
 
   if (_lst.size() < 2){
-    this->clean();
     throw(My_Exception("Stack is less then 2 mul()"));
   }
   first = this->_lst.front();
@@ -56,7 +55,6 @@ void Execute::div(){
   IOperand const * second;
 
   if (_lst.size() < 2){
-    this->clean();
     throw(My_Exception("Stack is less then 2 div()"));
   }
   first = this->_lst.front();
@@ -78,7 +76,6 @@ void Execute::sub(){
   IOperand const * second;
 
   if (_lst.size() < 2){
-    this->clean();
     throw(My_Exception("Stack is less then 2 sub()"));
   }
   first = this->_lst.front();
@@ -95,7 +92,6 @@ void Execute::add(){
   IOperand const * second;
 
   if (_lst.size() < 2){
-    this->clean();
     throw(My_Exception("Stack is less then 2 add()"));
   }
   first = this->_lst.front();
@@ -118,7 +114,6 @@ void Execute::assert(std:: list<struct pars>::iterator line){
     {"double", double_e}
   };
   if (_lst.size() < 1){
-    this->clean();
     throw(My_Exception("Stack empty assert()"));
   }
   tmp = this->_createOperand(myMap[line->type], line->value);
@@ -129,7 +124,6 @@ void Execute::assert(std:: list<struct pars>::iterator line){
 
 void Execute::pop(){
   if (_lst.size() < 1){
-    this->clean();
     throw(My_Exception("Stack empty pop()"));
   }
   delete (_lst.front());

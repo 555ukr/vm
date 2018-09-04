@@ -4,12 +4,22 @@
 #include "IOperand.hpp"
 #include <map>
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 
 template <typename T>
 class Type: public IOperand{
 
 public:
-	Type(eOperandType type, T val):  _type(type), _value(val), _strValue(std::to_string(val)){
+	Type(eOperandType type, T val):  _type(type), _value(val){
+		std::ostringstream out;
+
+		if (type == 1 || type == 2 || type == 3)
+			 this->_strValue = (std::to_string(val));
+		else{
+    	out << std::fixed << std::setprecision(2) << val;
+			this->_strValue = out.str();
+		}
 	};
 
 	virtual int getPrecision( void ) const{
@@ -26,6 +36,7 @@ public:
 			precision = rhs.getType();
 		else
 			precision = this->_type;
+		//std::cout << precision << std::endl;
 		str = makeNum(this->getValue(), rhs.getValue(), precision, 1);
 		return (makeType(precision, str));
 	};
@@ -80,6 +91,7 @@ public:
 	}
 
 	virtual Type const * makeType(eOperandType tmp, std::string str) const{
+		//std::cout << "makeType " << std::stof(str) << std::endl;
 		if (tmp == 1)
 			return (new Type(tmp, static_cast<int8_t>(std::stoi(str))));
 		else if (tmp == 2)
@@ -87,9 +99,9 @@ public:
 		else if (tmp == 3)
 			return (new Type(tmp, static_cast<int32_t>(std::stoi(str))));
 		else if (tmp == 4)
-			return (new Type(tmp, static_cast<float>(std::stoi(str))));
+			return (new Type(tmp, static_cast<float>(std::stof(str))));
 		else
-			return (new Type(tmp, static_cast<double>(std::stoi(str))));
+			return (new Type(tmp, static_cast<double>(std::stod(str))));
 	}
 	/*
 	1 +
@@ -116,10 +128,15 @@ public:
 			else
 				return std::to_string((i1) % (i2));
 		} else{
+			// std::cout << "lol" << std::endl;
 			d1 = std::stod(str);
 			d2 = std::stod(str1);
-			if (sign == 1)
-		  	return std::to_string((d1) + (d2));
+			// std::cout << d1 << std::endl;
+			// std::cout << d2 << std::endl;
+			if (sign == 1){
+				//std::cout << std::to_string((d1) + (d2)) << std::endl;
+				return std::to_string((d1) + (d2));
+			}
 			else if (sign == 2)
 				return std::to_string((d1) - (d2));
 			else if (sign == 3)
@@ -173,7 +190,7 @@ public:
 private:
 	eOperandType 			_type;
 	T									_value;
-	const std::string _strValue;
+	std::string _strValue;
 };
 
 #endif
