@@ -1,22 +1,23 @@
-NAME = ft_retro
+NAME = abstractVM
 
-CC = clang++
+CC = g++ -std=c++11
 
 SRC_PATH = ./src/
 INC_PATH = ./inc/
 
-INC =	Board.hpp \
-		Player.hpp \
-		Shoot.hpp \
-		Enemy.hpp \
-		EnemyHorde.hpp \
+INC =	eOperandType.hpp \
+			Execute.hpp \
+			IOperand.hpp \
+			Lexser.hpp \
+			My_Exception.hpp \
+			Parser.hpp \
+			Type.hpp
 
-SRC =	main.cpp \
-		Board.cpp \
-		Player.cpp \
-		Enemy.cpp \
-		Shoot.cpp \
-		EnemyHorde.cpp \
+SRC =	Execute.cpp \
+			Lexser.cpp \
+			main.cpp \
+			My_Exception.cpp \
+			Parser.cpp
 
 OBJ = $(SRC:.cpp=.o)
 OBJ_DIR = obj
@@ -25,7 +26,7 @@ OBJ_SRC = $(addprefix $(OBJ_DIR)/, $(SRC:.cpp=.o))
 all: $(NAME)
 
 $(NAME): $(OBJ_SRC)
-	$(CC) -Wall -Werror -Wextra -lncurses $(OBJ_SRC) -o $(NAME)
+	$(CC) -Wall -Werror -Wextra $(OBJ_SRC) -o $(NAME)
 
 $(OBJ_DIR)/%.o : $(SRC_PATH)%.cpp
 	@/bin/mkdir -p $(OBJ_DIR)
