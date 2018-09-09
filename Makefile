@@ -26,11 +26,11 @@ OBJ_SRC = $(addprefix $(OBJ_DIR)/, $(SRC:.cpp=.o))
 all: $(NAME)
 
 $(NAME): $(OBJ_SRC)
-	$(CC) -Wall -Werror -Wextra $(OBJ_SRC) -o $(NAME)
+	$(CC) -g -Wall -Werror -Wextra $(OBJ_SRC) -o $(NAME)
 
 $(OBJ_DIR)/%.o : $(SRC_PATH)%.cpp
 	@/bin/mkdir -p $(OBJ_DIR)
-	@$(CC) -Wall -Werror -Wextra -I$(INC_PATH) -c -o $@ $<
+	@$(CC)  -g -Wall -Werror -Wextra -I$(INC_PATH) -c -o $@ $<
 
 clean:
 	@/bin/rm -rf $(OBJ_DIR)

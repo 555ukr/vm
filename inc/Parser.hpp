@@ -3,8 +3,10 @@
 
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <regex>
 #include "eOperandType.hpp"
+#include "Execute.hpp"
 #include <list>
 /*
   char input = 1 read from standart input;
@@ -14,6 +16,7 @@ class Parser{
 
 public:
   Parser(int input, char *file[]);
+  ~Parser();
   struct pars * getLine();
   std::list<struct pars> makeList();
 
@@ -21,8 +24,8 @@ private:
   struct pars * parse(std::string line);
   void          valuePars(struct pars *tmp);
 
-  char        _input;
-
+  int            _input;
+  std::ifstream    myfile;
 };
 
 #endif

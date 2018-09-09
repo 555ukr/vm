@@ -3,23 +3,38 @@
 Parser::Parser(int input, char *file[]){
   if (input == 1)
     this->_input = 1;
-  if (file){
-    //
+  else{
+    this->_input = 2;
+    this->myfile.open (file[1]);
   }
+}
+
+Parser::~Parser(){
+  this->myfile.close();
 }
 
 std::list<struct pars> Parser::makeList(){
   std::list<struct pars> tmp;
   struct pars *line;
 
-  while(1){
-    line = this->getLine();
-    if (line->end == true){
+  if (this->_input == 1){
+    while(1){
+      line = this->getLine();
+      if (line->end == true){
+        if (!line->command.empty()){
+          tmp.push_back(*line);
+        }
+        delete line;
+        break;
+      }
+      tmp.push_back(*line);
       delete line;
-      break;
     }
-    tmp.push_back(*line);
-    delete line;
+  } else {
+    if (!this->myfile.is_open()){
+        throw(My_Exception("Wrong file parser"));
+    }
+    
   }
   return tmp;
 }
@@ -55,8 +70,11 @@ struct pars * Parser::parse(std::string line){
   std::regex comment("( *;.*)");
   std::regex end(" *;;(( +;.*)|( *))");
   std::regex_iterator<std::string::iterator> rend;
+  std::string short_line;
 
-  std::regex_iterator<std::string::iterator> com ( line.begin(), line.end(), command);
+  std::size_t pos = line.find(";");
+  short_line = line.substr (0, pos);
+  std::regex_iterator<std::string::iterator> com ( short_line.begin(), short_line.end(), command);
   if (std::distance(com, rend) != 0)
     tmp->command = com->str();
   else
@@ -72,12 +90,16 @@ struct pars * Parser::parse(std::string line){
     tmp->value = tmp->value.substr(1, tmp->value.size() - 2);
   }
 
+  std::regex_iterator<std::string::iterator> finish ( line.begin(), line.end(), end);
+  if (std::distance(finish, rend) != 0){
+    tmp->end = true;
+    return tmp;
+  }
+
   std::regex_iterator<std::string::iterator> comme ( line.begin(), line.end(), comment);
   if (std::distance(comme, rend) != 0)
     tmp->comment = true;
 
-  std::regex_iterator<std::string::iterator> finish ( line.begin(), line.end(), end);
-  if (std::distance(finish, rend) != 0)
-    tmp->end = true;
+
   return tmp;
 }

@@ -9,6 +9,8 @@ void Lexser::input(std:: list<struct pars>::iterator it){
 }
 
 void Lexser::checkInput(std:: list<struct pars>::iterator line) throw(My_Exception &){
+  if (line->nline)
+    return ;
   if ((line->err && !line->comment) ||
    ((line->command == "push" || line->command == "assert") && line->type.empty()) ||
    ((line->command != "push" && line->command != "assert") && !line->type.empty())){
