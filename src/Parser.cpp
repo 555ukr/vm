@@ -17,24 +17,20 @@ std::list<struct pars> Parser::makeList(){
   std::list<struct pars> tmp;
   struct pars *line;
 
-  if (this->_input == 1){
-    while(1){
-      line = this->getLine();
-      if (line->end == true){
-        if (!line->command.empty()){
-          tmp.push_back(*line);
-        }
-        delete line;
-        break;
+  if (this->_input == 2 && !this->myfile.is_open()){
+      throw(My_Exception("Wrong file parser"));
+  }
+  while(1){
+    line = this->getLine();
+    if (line->end == true){
+      if (!line->command.empty()){
+        tmp.push_back(*line);
       }
-      tmp.push_back(*line);
       delete line;
+      break;
     }
-  } else {
-    if (!this->myfile.is_open()){
-        throw(My_Exception("Wrong file parser"));
-    }
-    
+    tmp.push_back(*line);
+    delete line;
   }
   return tmp;
 }
@@ -46,18 +42,21 @@ struct pars * Parser::getLine(){
 
   if (_input == 1){
     std::getline (std::cin, line);
-    if (line.empty()){
-      tmp->nline = true;
-      return tmp;
-    }
-    if (!regex_match(line, primary)){
-      tmp->err = true;
-      return tmp;
-    }
-    delete tmp;
-    return this->parse(line);
   }
-  //TODO read from file
+  else{
+    if (!std::getline(myfile, line)){
+      tmp->end = true;
+      return tmp;
+    }
+  }
+  if (line.empty()){
+    tmp->nline = true;
+    return tmp;
+  }
+  if (!regex_match(line, primary)){
+    tmp->err = true;
+    return tmp;
+  }
   delete tmp;
   return this->parse(line);
 }
