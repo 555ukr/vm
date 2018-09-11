@@ -2,6 +2,19 @@
 
 Execute::Execute(){}
 
+Execute::Execute(Execute const & src){
+  *this = src;
+}
+
+Execute & Execute::operator=(Execute const & src){
+  this->_lst = src.getList();
+  return (*this);
+}
+
+std::list<const IOperand *> Execute::getList() const{
+  return this->_lst;
+}
+
 Execute::~Execute(){
   this->clean();
 }

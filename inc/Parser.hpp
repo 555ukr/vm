@@ -16,6 +16,8 @@ class Parser{
 
 public:
   Parser(int input, char *file[]);
+  Parser(Parser const & src);
+  Parser & operator=(Parser const & rhs);
   ~Parser();
   struct pars * getLine();
   std::list<struct pars> makeList();
@@ -23,9 +25,11 @@ public:
 private:
   struct pars * parse(std::string line);
   void          valuePars(struct pars *tmp);
+  int           getInt() const;
+  std::ifstream const * getFile() const;
 
   int            _input;
-  std::ifstream    myfile;
+  std::ifstream   myfile;
 };
 
 #endif

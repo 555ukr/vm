@@ -46,9 +46,9 @@ void Lexser::typeError(std::string type, std::string value){
     else if (value.size() > 11 && value.at(0) == '-')
       throw(My_Exception("Underflow on a value int32"));
     tmpLong = std::stoll(value);
-    if (tmpInt > 2147483647)
+    if (tmpLong > 2147483647)
       throw(My_Exception("Overflow on a value int32"));
-    else if (tmpInt + 1 < -2147483648 + 1)
+    else if (tmpLong + 1 < -2147483648 + 1)
       throw(My_Exception("Underflow on a value int32"));
   } else if (type == "float"){
     if (value.find(".") != std::string::npos)

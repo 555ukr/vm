@@ -9,6 +9,23 @@ Parser::Parser(int input, char *file[]){
   }
 }
 
+Parser::Parser(Parser const & src){
+  *this = src;
+}
+
+Parser & Parser::operator=(Parser const & rhs){
+  this->_input = rhs.getInt();
+  return *this;
+}
+
+int           Parser::getInt() const{
+  return this->_input;
+}
+
+std::ifstream const * Parser::getFile() const{
+  return &(this->myfile);
+}
+
 Parser::~Parser(){
   this->myfile.close();
 }
@@ -65,7 +82,7 @@ struct pars * Parser::parse(std::string line){
   struct pars * tmp = new struct pars;
   std::regex command ("(push|pop|dump|assert|add|sub|mul|div|mod|print|exit)");
   std::regex type ("(int8|int16|int32|float|double)");
-  std::regex val ("(\\([-]?[0-9]+(.[0-9]+)?+\\))");
+  std::regex val ("(\\(-?[0-9]+(\\.[0-9]+)?\\))");
   std::regex comment("( *;.*)");
   std::regex end(" *;;(( +;.*)|( *))");
   std::regex_iterator<std::string::iterator> rend;
@@ -78,7 +95,6 @@ struct pars * Parser::parse(std::string line){
     tmp->command = com->str();
   else
     tmp->err = true;
-
   std::regex_iterator<std::string::iterator> tp ( line.begin(), line.end(), type);
   if (std::distance(tp, rend) != 0)
     tmp->type = tp->str();

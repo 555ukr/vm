@@ -14,6 +14,8 @@
 class Execute{
 public:
   Execute();
+  Execute(Execute const & src);
+  Execute & operator=(Execute const & src);
   ~Execute();
   void exec(std:: list<struct pars>::iterator line);
   void loop();
@@ -30,6 +32,8 @@ public:
 
 private:
   std::list<const IOperand *> _lst;
+
+  std::list<const IOperand *> getList() const;
 
   IOperand const * _createOperand(eOperandType type, std::string const & value )const;
   IOperand const * _createInt8(std::string const & value )const;
