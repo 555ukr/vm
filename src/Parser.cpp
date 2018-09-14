@@ -106,7 +106,7 @@ struct pars * Parser::parse(std::string line){
   }
 
   std::regex_iterator<std::string::iterator> finish ( line.begin(), line.end(), end);
-  if (std::distance(finish, rend) != 0){
+  if (std::distance(finish, rend) != 0 && this->_input == 1){
     tmp->end = true;
     return tmp;
   }

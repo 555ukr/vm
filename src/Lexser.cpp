@@ -6,6 +6,8 @@ void Lexser::input(std:: list<struct pars>::iterator it){
       this->checkInput(it);
       if (it->command == "push" || it->command == "assert")
         this->getValue(it);
+      if (it->command == "exit")
+        throw(My_Exception("exit"));
 }
 
 void Lexser::checkInput(std:: list<struct pars>::iterator line) throw(My_Exception &){

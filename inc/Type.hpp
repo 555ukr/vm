@@ -20,6 +20,8 @@ public:
 		else{
     	out << std::fixed << std::setprecision(2) << val;
 			this->_strValue = out.str();
+			if (!val)
+				this->_strValue = "0";
 		}
 	};
 
@@ -142,8 +144,9 @@ public:
 				return std::to_string((d1) - (d2));
 			else if (sign == 3)
 				return std::to_string((d1) * (d2));
-			else if (sign == 4)
+			else if (sign == 4){
 				return std::to_string((d1) / (d2));
+			}
 			else
 				return std::to_string(fmod(d1, d2));
 		}
